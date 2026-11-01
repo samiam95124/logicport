@@ -160,6 +160,12 @@ trigger, allowing for the trigger pipeline delay (7 samples, 21 in DDR).
   2.5 s, the picture at `LOGICPORT_SHOT_MS`). `LOGICPORT_TRACE=1` logs the
   link to stderr in either build.
 
+## License
+
+BSD 3-clause, see [LICENSE](LICENSE), the same terms as the AMI tool kit.
+The one exception is `vendor/sigrok-fwextract-intronix-logicport`, which is
+from the sigrok-util project and stays under its own GPL v3 license.
+
 ## What is not done
 
 - The second trigger level (A then B), occurrence counts, durations and
