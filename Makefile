@@ -67,10 +67,17 @@ logicport: $(SRCS) la.h $(AMILIB)
 shot: $(SRCS) la.h $(AMILIB)
 	$(CC) $(CFLAGS) -DSHOT $(SRCS) $(CAPTURE) $(KEEP) $(AMILINK) $(LIBS) $(shell pkg-config --libs libpng) -lm -o logicport_shot$(EXE)
 
+# fetch the vendor installer and extract the FPGA image into vendor/ (needs
+# python3 and 7-Zip: 7zz, 7z or 7za; brew install sevenzip on the Mac)
+firmware: vendor/intronix-logicport.ccf
+
+vendor/intronix-logicport.ccf:
+	cd vendor && python3 sigrok-fwextract-intronix-logicport --download -o .
+
 sim: logicport
 	./logicport$(EXE) --sim
 
 clean:
 	rm -rf logicport logicport_shot logicport.exe logicport_shot.exe logicport.dSYM
 
-.PHONY: all sim shot clean
+.PHONY: all sim shot firmware clean

@@ -53,12 +53,12 @@ Intronix has not licensed for redistribution, so they are not in this
 repository. `vendor/` holds the extraction tool from the sigrok-util project
 and the hashes; to get the file:
 
-    cd vendor
-    python3 sigrok-fwextract-intronix-logicport --download -o .
+    make firmware            # needs python3 and 7-Zip (brew install sevenzip on the Mac)
 
-fetches `logicport_2371.exe` (4.8 MB) from pctestinstruments.com and writes
-`intronix-logicport.ccf` (8.4 MB, sha256 `9298a5ea…`) beside it, which is
-where the program looks first. It also looks in the current directory, in
+runs `vendor/sigrok-fwextract-intronix-logicport --download`, which fetches
+`logicport_2371.exe` (4.8 MB) from pctestinstruments.com and writes
+`vendor/intronix-logicport.ccf` (8.4 MB, sha256 `9298a5ea…`), which is where
+the program looks first. Or copy that file from a machine that has it. It also looks in the current directory, in
 `vendor/` next to the executable, in `~/.local/share/sigrok-firmware` and
 `/usr/share/sigrok-firmware` (where a sigrok install of the same driver would
 put it), and at `$LOGICPORT_CCF`. Without the file the analyzer is found and
