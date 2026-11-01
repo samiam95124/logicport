@@ -1023,6 +1023,8 @@ static void run_script(const char *script)
         if (!strncmp(tok, "CURA", 4)) { cur_a = atof(tok + 4); continue; }
         if (!strncmp(tok, "CURB", 4)) { cur_b = atof(tok + 4); continue; }
         if (!strncmp(tok, "ZOOM", 4)) { zoom(atof(tok + 4), view_s0 + view_span / 2); continue; }
+        if (!strncmp(tok, "S0", 2)) { view_s0 = atof(tok + 2); view_fit = 0; continue; }
+        if (!strncmp(tok, "SPAN", 4)) { view_span = atof(tok + 4); view_fit = 0; continue; }
         for (i = 0; i < (int)(sizeof tab / sizeof tab[0]); i++)
             if (!strcmp(tab[i].n, tok)) { click(tab[i].id); fprintf(stderr, "script: %s at %ld ms\n", tok, now_ms()); }
     }

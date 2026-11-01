@@ -23,6 +23,8 @@ the host, through the FTDI chip in bit-bang mode, every time the analyzer is
 set up. The images come from the vendor's own `LogicPort.ccf`, which this
 program reads unmodified; see *The FPGA image* below.
 
+![The panel, on the simulated board: a rising edge trigger on D0, cursor A, and the UART, SPI, I2C, counter and clock signals](panel.png)
+
 ## Build and run
 
     make                     # needs ~/projects/amitk built (or set AMIDIR), libusb-1.0
@@ -154,6 +156,7 @@ trigger, allowing for the trigger pipeline delay (7 samples, 21 in DDR).
   installer, help files and extracted image once fetched (not committed).
 - `NOTES.md`: hardware details of this unit and the state of the upstream
   projects.
+- `panel.png`: the panel on the simulated board, taken with the test build.
 - `make shot` builds `logicport_shot`, a test version that photographs its
   own window (`LOGICPORT_SHOT=<file>`) and runs scripted clicks
   (`LOGICPORT_SCRIPT=RATE+,COND0,SINGLE` at 1 s, `LOGICPORT_SCRIPT2=CSV` at
