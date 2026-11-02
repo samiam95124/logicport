@@ -13,9 +13,9 @@ builds on Linux, Mac OS X and Windows, as the other AMI instrument panels do
 
 Not affiliated with or endorsed by Intronix Test Instruments. LogicPort is a
 product name of Intronix. This program is an independent work for that
-hardware: it contains no vendor code, artwork or icons, and the FPGA images
-it needs are fetched from the vendor by the user (see below). `--version`
-prints this notice.
+hardware: it contains no vendor code, artwork or icons. The FPGA image the
+hardware needs, which is the vendor's, ships in `vendor/` unmodified (see
+below). `--version` prints this notice.
 
 The device is an FTDI FT245BL USB FIFO in front of an Altera Cyclone EP1C4
 FPGA and has no firmware of its own: the FPGA is SRAM based and is loaded by
@@ -48,17 +48,18 @@ the device has to be bound to WinUSB with Zadig, as for the mso1104 panel.
 
 ### The FPGA image
 
-The program needs the eight FPGA images from the vendor software, which
-Intronix has not licensed for redistribution, so they are not in this
-repository. `vendor/` holds the extraction tool from the sigrok-util project
-and the hashes; to get the file:
+The program needs the eight FPGA images from the vendor software. They are
+in `vendor/intronix-logicport.ccf` (8.4 MB, sha256 `9298a5ea…`), which is
+the vendor's `LogicPort.ccf` from installer build 2371 unmodified, and the
+first place the program looks. The file is Intronix's work, included so the
+analyzer can be used; it is not covered by this project's license. To fetch
+and extract it afresh from the vendor instead,
 
     make firmware            # needs python3 and 7-Zip (brew install sevenzip on the Mac)
 
-runs `vendor/sigrok-fwextract-intronix-logicport --download`, which fetches
-`logicport_2371.exe` (4.8 MB) from pctestinstruments.com and writes
-`vendor/intronix-logicport.ccf` (8.4 MB, sha256 `9298a5ea…`), which is where
-the program looks first. Or copy that file from a machine that has it. It also looks in the current directory, in
+runs `vendor/sigrok-fwextract-intronix-logicport --download`, which gets
+`logicport_2371.exe` (4.8 MB) from pctestinstruments.com and checks the
+result against the known hash. It also looks in the current directory, in
 `vendor/` next to the executable, in `~/.local/share/sigrok-firmware` and
 `/usr/share/sigrok-firmware` (where a sigrok install of the same driver would
 put it), and at `$LOGICPORT_CCF`. Without the file the analyzer is found and
@@ -166,8 +167,9 @@ trigger, allowing for the trigger pipeline delay (7 samples, 21 in DDR).
 ## License
 
 BSD 3-clause, see [LICENSE](LICENSE), the same terms as the AMI tool kit.
-The one exception is `vendor/sigrok-fwextract-intronix-logicport`, which is
-from the sigrok-util project and stays under its own GPL v3 license.
+Two files in `vendor/` are not: `sigrok-fwextract-intronix-logicport` is
+from the sigrok-util project under its GPL v3 license, and
+`intronix-logicport.ccf` is Intronix's FPGA image, redistributed as is.
 
 ## What is not done
 

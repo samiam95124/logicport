@@ -5,5 +5,4 @@ logicport_shot.exe
 *.dSYM/
 vendor/*.exe
 vendor/*.zip
-vendor/*.ccf
 .remember/
