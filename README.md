@@ -43,8 +43,26 @@ in `/etc/udev/rules.d/99-logicport.rules`, then
 `sudo udevadm control --reload && sudo udevadm trigger` or a replug. The
 program looks for the analyzer every 2 s, so it can be plugged in after
 starting, and it reconnects after a cable pull. On the Mac libusb comes from
-Homebrew (`brew install libusb`); on Windows (MSYS2 MinGW) from pacman, and
-the device has to be bound to WinUSB with Zadig, as for the mso1104 panel.
+Homebrew (`brew install libusb`); on Windows (MSYS2 MinGW) from pacman.
+
+On Windows the analyzer has to be bound to the WinUSB driver, which is what
+libusb opens there. Out of the box Windows leaves it with no driver (Device
+Manager shows "LogicPort Logic Analyzer" with a warning), and a device with
+no driver is invisible to libusb, so the panel just says no LogicPort was
+found. Binding it is a one time step per machine:
+
+    powershell -ExecutionPolicy Bypass -File windows\install_winusb.ps1
+
+installs `windows/logicport_winusb.inf`, a package that names the WinUSB
+driver Windows already has. Windows will not install an unsigned package,
+so the script does what Zadig does: it signs the package with a throwaway
+self-signed certificate, trusts that for the moment of the install, and
+removes it again. It asks for administrator rights itself (a UAC prompt).
+The alternative is [Zadig](https://zadig.akeo.ie): choose "LogicPort Logic
+Analyzer" (USB ID `0403 DC48`), select *WinUSB* and press *Install Driver*.
+To undo it, uninstall the device in Device Manager with "delete the driver
+software" ticked, or `pnputil /delete-driver oemNN.inf /uninstall /force`
+with the package `pnputil /enum-drivers` lists for `logicport_winusb.inf`.
 
 ### The FPGA image
 
