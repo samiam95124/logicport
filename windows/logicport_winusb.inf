@@ -1,0 +1,45 @@
+; Binds the Intronix LogicPort LA1034 logic analyzer (USB 0403:DC48) to the
+; WinUSB driver that ships with Windows, so that libusb can open it. This is
+; what Zadig does; install_winusb.ps1 beside this file signs and installs it.
+
+[Version]
+Signature="$Windows NT$"
+Class=USBDevice
+ClassGUID={88BAE032-5A81-49f6-BC3C-D8E12A7D5B4E}
+Provider=%ProviderName%
+CatalogFile=logicport_winusb.cat
+DriverVer=11/01/2026,1.0.0.1
+
+; the USBDevice class is not registered until a device of it is installed,
+; so the package registers it, as Zadig's does
+[ClassInstall32]
+AddReg=ClassInstall_AddReg
+
+[ClassInstall_AddReg]
+HKR,,,,"Universal Serial Bus devices"
+HKR,,Icon,,"-20"
+
+[Manufacturer]
+%ProviderName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%DeviceName%=USB_Install, USB\VID_0403&PID_DC48
+
+[USB_Install]
+Include=winusb.inf
+Needs=WINUSB.NT
+
+[USB_Install.Services]
+Include=winusb.inf
+Needs=WINUSB.NT.Services
+
+[USB_Install.HW]
+AddReg=Dev_AddReg
+
+[Dev_AddReg]
+HKR,,DeviceInterfaceGUIDs,0x10000,"{28fd1ea1-f5ee-41db-9da3-9dd54756c3c0}"
+
+[Strings]
+ProviderName="LogicPort front panel"
+DeviceName="Intronix LogicPort LA1034 (WinUSB)"
+

@@ -643,20 +643,18 @@ static int find_ccf(void)
     const char *env = getenv("LOGICPORT_CCF");
     const char *dirs[8];
     int nd = 0, d, n;
-    ssize_t len;
+    size_t len;
 
     st.have_ccf = 0;
     if (env && *env && load_ccf(env) == 0) { snprintf(st.ccf, sizeof st.ccf, "%s", env); st.have_ccf = 1; return 0; }
     dirs[nd++] = "vendor";
     dirs[nd++] = ".";
-    len = readlink("/proc/self/exe", exe, sizeof exe - 1);
-    if (len > 0) {
-        char *s;
-
-        exe[len] = 0;
-        s = strrchr(exe, '/');
-        if (s) { *s = 0; strncat(exe, "/vendor", sizeof exe - strlen(exe) - 1); dirs[nd++] = exe; }
-    }
+    /* the toolkit knows where the executable lives on every platform */
+    ami_getpgm(exe, sizeof exe - 1);
+    exe[sizeof exe - 1] = 0;
+    len = strlen(exe);
+    while (len > 0 && (exe[len - 1] == '/' || exe[len - 1] == '\\')) exe[--len] = 0;
+    if (len > 0) { strncat(exe, "/vendor", sizeof exe - strlen(exe) - 1); dirs[nd++] = exe; }
     ami_getusr(usr, sizeof usr - 1);
     usr[sizeof usr - 1] = 0;
     strncat(usr, "/.local/share/sigrok-firmware", sizeof usr - strlen(usr) - 1);
